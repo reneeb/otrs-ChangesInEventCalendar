@@ -1,0 +1,32 @@
+=head1 NAME
+
+ChangesInEventCalendar
+
+=head1 DESCRIPTION
+
+The dashboard in OTRS has lots of useful information and it has a "Ticket event calendar". This 
+calendar can (and should) be used for other information as well. This addon shows ITSM Changes
+in that calendar (using the planned start and the planned end time).
+
+=head1 ENHANCEMENTS
+
+This is a pet project of mine, so I will add new features in my free time. New versions to keep in
+sync with new major OTRS versions will be created in time.
+
+If you need enhancements, I would be happy to merge pull requests or apply patches you send ;-) 
+
+Or you can pay me to add new features...
+
+=head1 SUPPORT & CODE
+
+The repository and an issue tracker are available at L<https://github.com/reneeb/otrs-ChangesInEventCalendar>.
+
+Please report any issues there and B<not> in the comments. I do not check the comments here at OPAR
+regularly.
+
+=head1 AUTHOR & LICENSE
+
+Renee Baecker C<info@feature-addons.de>
+
+Licensed under the terms of AGPL 3
+

@@ -60,10 +60,10 @@ sub Run {
         );
     ~,
     $LanguageObject->Get('Change Information'),
-    $LanguageObject->Get('Change');
+    $LanguageObject->Get('ITSMChange');
 
     ${ $Param{Data} } =~ s~
-        \[% \s+ RenderBlockStart\("CustomerTable"\) \s+ %\] \s*
+        \[% \s+ RenderBlockEnd\("CalendarEvent"\) \s+ %\] \s*
             \] \s*
         \}\); \s* \K
     ~$JS~xms;

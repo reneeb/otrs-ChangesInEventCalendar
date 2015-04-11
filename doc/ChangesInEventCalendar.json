@@ -1,0 +1,21 @@
+{
+    "name": "ChangesInEventCalendar",
+    "version": "4.0.1",
+    "framework": [
+        "4.0.x"
+    ],
+    "vendor": {
+        "name":  "Perl-Services.de",
+        "url": "http://www.perl-services.de"
+    },
+    "license": "GNU AFFERO GENERAL PUBLIC LICENSE Version 3, November 2007",
+    "description" : {
+        "en": "Show changes in event calendar.",
+        "de": "Zeige Changes im Eventkalender."
+    },
+    "requires":{
+        "package" : {
+            "ITSMChangeManagement" : "4.0.1"
+        }
+    }
+}

@@ -46,23 +46,29 @@ sub Run {
         SystemTime => $ParamObject->GetParam( Param => 'start' ),
     );
 
-    my @To = $TimeObject->SystemTime2(
+    my @To = $TimeObject->SystemTime2Date(
         SystemTime => $ParamObject->GetParam( Param => 'end' ),
     );
 
-    my $Start = sprintf( "%04d-%02d-%02d 00:00:00", @From[5,4,3] ),
-    my $To    = sprintf( "%04d-%02d-%02d 23:59:59", @To[5,4,3] ),
+    my $Start = sprintf( "%04d-%02d-%02d 00:00:00", @From[5,4,3] );
+    my $To    = sprintf( "%04d-%02d-%02d 23:59:59", @To[5,4,3] );
 
-    my @StartEvents = $ITSMChangeObject->ChangeSearch(
+    my $StartEvents = $ITSMChangeObject->ChangeSearch(
         PlannedStartTimeNewerDate => $Start,
         PlannedStartTimeOlderDate => $To,
         UserID                    => $Self->{UserID},
     );
 
-    my @EndEvents = $ITSMChangeObject->ChangeSearch(
+    my $EndEvents = $ITSMChangeObject->ChangeSearch(
         PlannedEndTimeNewerDate => $Start,
         PlannedEndTimeOlderDate => $To,
         UserID                  => $Self->{UserID},
+    );
+
+    my $LongEvents = $ITSMChangeObject->ChangeSearch(
+        PlannedStartTimeOlderDate => $Start,
+        PlannedEndTimeNewerDate   => $To,
+        UserID                    => $Self->{UserID},
     );
 
     my $Color = $ConfigObject->Get('ITSMChange::CalendarColor') || '#aa0000';
@@ -70,7 +76,7 @@ sub Run {
     my %ChangesSeen;
 
     CHANGEID:
-    for my $ChangeID ( @StartEvents, @EndEvents ) {
+    for my $ChangeID ( @{$StartEvents}, @{$EndEvents}, @{$LongEvents} ) {
         next CHANGEID if $ChangesSeen{$ChangeID}++;
 
         my $Change = $ITSMChangeObject->ChangeGet(
@@ -86,17 +92,16 @@ sub Run {
             String => $Change->{PlannedEndTime},
         );        
 
-        my $Title = sprintf "%s - %s", $Change->{Number}, $Change->{ChangeTitle};
+        my $Title = sprintf "%s - %s", $Change->{ChangeNumber}, $Change->{ChangeTitle};
 
         push @EventsForCalendar, {
-                id     => 'change-' . $Event->{ID},
-                title  => $Title,
-                start  => $FromSeconds,
-                end    => $ToSeconds,
-                color  => $Color,
-                allDay => 1,
-            };
-        }
+            id     => 'change-' . $Change->{ChangeID},
+            title  => $Title,
+            start  => $FromSeconds,
+            end    => $ToSeconds,
+            color  => $Color,
+            allDay => 1,
+        };
     }
 
     my $JSON = $LayoutObject->JSONEncode( Data => \@EventsForCalendar );
