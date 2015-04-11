@@ -4,6 +4,7 @@
     <Name>ChangesInEventCalendar</Name>
     <Version>4.0.1</Version>
     <Framework>4.0.x</Framework>
+    <PackageRequired Version="4.0.1">ITSMChangeManagement</PackageRequired>
     <Vendor>Perl-Services.de</Vendor>
     <URL>http://www.perl-services.de</URL>
     <Description Lang="de">Zeige Changes im Eventkalender.</Description>
@@ -14,5 +15,6 @@
         <File Permission="644" Location="Custom/Kernel/Output/HTML/OutputFilterChangeEvents.pm" />
         <File Permission="644" Location="Kernel/Config/Files/ChangesInEventCalendar.xml" />
         <File Permission="644" Location="doc/ChangesInEventCalendar.json" />
+        <File Permission="644" Location="doc/en/ChangesInEventCalendar.pod" />
     </Filelist>
 </otrs_package>
