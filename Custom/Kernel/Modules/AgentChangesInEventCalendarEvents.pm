@@ -1,6 +1,5 @@
 # --
-# Kernel/Modules/AgentChangesInEventCalendarEvents.pm - return all event data for changes
-# Copyright (C) 2015 Perl-Services.de, http://www.perl-services.de
+# Copyright (C) 2015 - 2018 Perl-Services.de, http://www.perl-services.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file COPYING for license information (AGPL). If you
@@ -42,16 +41,24 @@ sub Run {
     my $LayoutObject     = $Kernel::OM->Get('Kernel::Output::HTML::Layout');
 
     my @EventsForCalendar;
-    my @From   = $TimeObject->SystemTime2Date(
-        SystemTime => $ParamObject->GetParam( Param => 'start' ),
-    );
+    my $Start = $ParamObject->GetParam( Param => 'start' );
+    my $To    = $ParamObject->GetParam( Param => 'end' );
 
-    my @To = $TimeObject->SystemTime2Date(
-        SystemTime => $ParamObject->GetParam( Param => 'end' ),
-    );
+    if ( $Start =~ m{\A[0-9]+\z} ) {
+        my @From = $TimeObject->SystemTime2Date(
+            SystemTime => $Start,
+        );
 
-    my $Start = sprintf( "%04d-%02d-%02d 00:00:00", @From[5,4,3] );
-    my $To    = sprintf( "%04d-%02d-%02d 23:59:59", @To[5,4,3] );
+        my @To = $TimeObject->SystemTime2Date(
+            SystemTime => $To,
+        );
+
+        $Start = sprintf( "%04d-%02d-%02d", @From[5,4,3] );
+        $To    = sprintf( "%04d-%02d-%02d", @To[5,4,3] );
+    }
+
+    $Start = sprintf "%s 00:00:00", $Start;
+    $To    = sprintf "%s 23:59:59", $To;
 
     my $StartEvents = $ITSMChangeObject->ChangeSearch(
         PlannedStartTimeNewerDate => $Start,
@@ -84,21 +91,13 @@ sub Run {
             ChangeID => $ChangeID,
         );
 
-        my $FromSeconds = $TimeObject->TimeStamp2SystemTime(
-            String => $Change->{PlannedStartTime},
-        );        
-
-        my $ToSeconds = $TimeObject->TimeStamp2SystemTime(
-            String => $Change->{PlannedEndTime},
-        );        
-
         my $Title = sprintf "%s - %s", $Change->{ChangeNumber}, $Change->{ChangeTitle};
 
         push @EventsForCalendar, {
             id     => 'change-' . $Change->{ChangeID},
             title  => $Title,
-            start  => $FromSeconds,
-            end    => $ToSeconds,
+            start  => $Change->{PlannedStartTime},
+            end    => $Change->{PlannedEndTime},
             color  => $Color,
             allDay => 1,
         };

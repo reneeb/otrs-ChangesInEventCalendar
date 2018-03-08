@@ -1,8 +1,8 @@
 {
     "name": "ChangesInEventCalendar",
-    "version": "4.0.1",
+    "version": "6.0.1",
     "framework": [
-        "4.0.x"
+        "6.0.x"
     ],
     "vendor": {
         "name":  "Perl-Services.de",
@@ -15,7 +15,7 @@
     },
     "requires":{
         "package" : {
-            "ITSMChangeManagement" : "4.0.1"
+            "ITSMChangeManagement" : "6.0.1"
         }
     }
 }
